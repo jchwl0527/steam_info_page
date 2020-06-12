@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Show Steam Info</title>
+    <meta charset="utf-8">
+    <meta name="description" content="Show Steam Info">
+    <meta name="keywords" content="Show Steam Info">
+    <!-- <meta charset="utf-8"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+
+    <!-- <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/vue/latest/vue.min.js"></script> -->
+
+    <style>
+        .fakeimg {
+            height: 200px;
+            background: rgb(3, 21, 29);
+        }
+
+        html {
+            height: 100%;
+        }
+
+        body {
+            height: 100%;
+        }
+
+        .footer {
+            height: auto;
+            width: 100%;
+            position: fixed;
+            bottom: 0;
+        }
+    </style>
+</head>
+<div class="jumbotron text-center" style="margin-bottom:0">
+    <h1>Steam Info Show Page</h1>
+    <p>一个用于展示steam库存与好友信息的简单页面</p>
+    <p>基于<a href="https://steamcommunity.com/dev/">Steam Web Api</a></p>
+</div>
+<body>
+    <nav class="navbar navbar-expand-sm bg-primary navbar-dark">
+        <a class="navbar-brand" href="https://www.dogcraft.top/steaminfo/">刷新</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="https://www.dogcraft.top">首页</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="https://dogcraft.top">动态blog</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <br>
+    <!-- <h2>steam 库存测试页面</h2> -->
+    <div class="row">
+        <div class="col-md">
+            <div class="container center">
+                <div class="card" id="sui">
+                    <div class="card-footer" id="sui2"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md">
+            <div class="container">
+                <div class="card">
+                    <div class="card-header text-center">
+                        <h4 class="card-title">最近在玩</h4>
+                    </div>
+                    <ul class="list-group" id="yxlb">
+                        <li class="list-group-item  list-group-item-info text-center" id="zzzw"></li>
+                        <!-- <li class="list-group-item">Second item</li> -->
+                        <!-- <li class="list-group-item">Third item</li> -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md">
+            <div class="container">
+                <div class="card">
+                    <div class="card-header text-center">
+                        <h4 class="card-title">好友列表</h4>
+                    </div>
+                    <ul class="list-group" id="flst">
+                        <li class="list-group-item  list-group-item-info" id="flsn"></li>
+                        <!-- <li class="list-group-item">Second item</li> -->
+                        <!-- <li class="list-group-item">Third item</li> -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function getQueryVariable(variable) {
+            var query = window.location.search.substring(1);
+            var vars = query.split("&");
+            for (var i = 0; i < vars.length; i++) {
+                var pair = vars[i].split("=");
+                if (pair[0] == variable) { return pair[1]; }
+            }
+            return (false);
+        }
+        var mainid = '76561198343712334'
+
+        if (getQueryVariable("sid")) {
+            mainid = getQueryVariable("sid");
+        } else {
+            console.log("默认sid")
+        }
+        var sg;
+        URRLsa = 'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/'
+        $.getJSON(`https://cfwk.dogcraft.top/cat/${mainid}`, function (json) {
+            sg = json.response;
+            // console.log(sg);
+            if (sg.total_count == null) {
+                htmltext01 = `最近没玩游戏`;
+            } else {
+                htmltext01 = `近期玩游戏数量:${sg.total_count}`;
+                var htmltext02 = ' ';
+                for (let index = 0; index < sg.total_count; index++) {
+                    const el = sg.games[index];
+                    htmltext02 = `<li class="list-group-item"><div class="row"> <div class="col-6 text-center justify-content-center"><img class="img-fluid rounded" style="width:100%" src="https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/${el.appid}/${el.img_logo_url}.jpg"></div><div class="col-6 text-center" ><p><a href="https://store.steampowered.com/app/${el.appid}">${el.name}</a></p><p>两周内玩了${el.playtime_2weeks}小时,总共玩了${el.playtime_forever}小时</p></div></div></li>`;
+                    //`<p>${el.name} 两周内玩了${el.playtime_2weeks}小时 总共玩了${el.playtime_forever}小时</p><br><p><a href="https://store.steampowered.com/app/${el.appid}"> <img src="https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/${el.appid}/${el.img_logo_url}.jpg" > </a> </p><br><br>`;
+                    $("#yxlb").append(htmltext02);
+                }
+            }
+            $("#zzzw").text(htmltext01);
+        });
+        var sgl;
+        var dogstatus = ["离线", "在线", "忙", "离开", "打盹", "渴望交易", "渴望玩游戏"];
+        getdogsum();
+        function getdogsum(cbk) {
+            $.getJSON(`https://cfwk.dogcraft.top/sum/${mainid}`, function (json) {
+                sgl = json;//.response;
+                // console.log(sgl);
+                var sua = sgl.response.players[0].timecreated;
+                var sub = sgl.response.players[0].lastlogoff;
+                var sdy = new Date(sua * 1000);
+                var sdz = new Date(sub * 1000);
+                htmltext1 = `  <div class="card-body"> <h4  class="card-title" >${sgl.response.players[0].personaname}</h4>`;
+                htmltext2 = `<img class="card-img-top img-fluid rounded"  src="${sgl.response.players[0].avatarfull}" alt="Card image" style="width:100%">`;
+                htmltext3 = `<p class="card-text"> <span class="badge badge-info">${dogstatus[sgl.response.players[0].personastate]}</span> <br>创号时间：${sdy.toString()} <br> 上次离线时间 : ${sdz.toString()}</p></div>`;
+                // htmltext4=`<`
+                $("#sui").prepend(htmltext2 + htmltext1 + htmltext3)
+                // htmltext3=``
+                // $("#sd").text(htmltext1);
+
+            });
+        }
+        var fdl;
+        getdogfld();
+        function getdogfld() {
+            $.getJSON(`https://cfwk.dogcraft.top/pig/${mainid}`, function (json) {
+                fdl = json;
+                if (fdl.friendslist == null) {
+                    $("#flsn").append('<p class="text-center">没有好友或者不公开好友资料<p>');
+                } else {
+                    htmltexta1 = `<p class="text-center">共有${fdl.friendslist.friends.length}个好友</p>`;
+                    $("#flsn").append(htmltexta1);
+                    //开始套娃
+                    var stt = [];
+                    for (let index = 0; index < fdl.friendslist.friends.length; index++) {
+                        const ele = fdl.friendslist.friends[index];
+                        stt[index] = ele.friend_since;
+
+                        $.getJSON(`https://cfwk.dogcraft.top/sum/${ele.steamid}`, function (jsio) {
+                            let sgl = jsio;
+                            htmltextb1 = `<div class="col-6 text-center"><a href="./?sid=${sgl.response.players[0].steamid}">${sgl.response.players[0].personaname}</a> </div>`;
+                            htmltextb2 = `<div class="col-6 text-center"><img src="${sgl.response.players[0].avatarmedium}" img-fluid rounded ></div>`;
+                            ltxt = '<li class="list-group-item"><div class="row">' + htmltextb2 + htmltextb1 + '</div></li>';
+                            $("#flst").append(ltxt);
+                        })
+                        // console.log(ele.steamid)
+
+                    }
+                }
+
+            })
+
+        }
+
+        var kc;
+        getcnyrt();
+
+        function getcnyrt() {
+            $.getJSON(`https://cfwk.dogcraft.top/dog/${mainid}`, function (json) {
+                kc = json.response;
+                // let hunum=kc.game_count;
+                var ooi = `<a href="#" class="btn btn-primary">库存数量:${kc.game_count}</a>`;
+                $("#sui2").html(ooi);
+                // console.log("hhu");
+
+            })
+        }
+
+    </script>
+
+    <br>
+    <div class="jumbotron text-center " style="margin-bottom:0">
+        <p>© 2020 Dogcraft</p>
+        <p>底部内容</p>
+    </div>
+
+
+</body>
+
+
+
+
+
+
+
+<!-- !!!
+<iframe src="https://www.dogcraft.top/lt.html"  width="100%"  scrolling="auto" seamless >
+</iframe>
+!!! -->
+
+
+<!-- !!!
+<link href="https://cdn.bootcdn.net/ajax/libs/botui/0.3.9/botui.min.css" rel="stylesheet">
+  <link href="https://cdn.bootcdn.net/ajax/libs/botui/0.3.9/botui-theme-default.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/vue/latest/vue.min.js"></script>
+  <script src="https://www.dogcraft.top/js/botui.js"></script>
+
+  <div   >
+    <div id="my-botui-app" class="botui">
+      <h4 class="text-center">与 dogcraft 对话中……</h4>
+      <bot-ui></bot-ui>
+    </div>
+  </div>
+
+  <script src="https://www.dogcraft.top/js/lt.js"></script>
+
+!!! -->
+
+
+<!-- if (document.getElementById("my-botui-app")) {
+    if ($("div").hasClass("botui-container")==false) {
+        botuiinit();
+    }
+} -->
+
+</html>
