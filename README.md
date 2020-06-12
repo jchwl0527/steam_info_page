@@ -1,0 +1,2 @@
+# steam_info_page
+一个用于展示steam库存与好友信息的页面
