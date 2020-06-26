@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Show Steam Info</title>
+    <meta charset="utf-8">
+    <meta name="description" content="Show Steam Info">
+    <meta name="keywords" content="Show Steam Info">
+    <!-- <meta charset="utf-8"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="./js/jq-paginator.js"></script>
+</head>
+<div class="col-md">
+    <div class="container">
+        <div class="card">
+
+            <div class="card-header text-center">
+                <h4 class="card-title">游戏库存</h4>
+            </div>
+            <!-- <div id="tt"></div> -->
+
+            <ul class="list-group" id="yxlb">
+            </ul>
+            <div class="card-footer">
+                <ul class="pagination" id="ttsd"></ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    var PAGEITAM = 10;
+    var mainid = '76561198343712334';
+    var datadog = [];
+
+    function showitams(pl, dat) {
+        $(pl).html("");
+        for (let index = 0; index < dat.length; index++) {
+            const el = dat[index];
+            htmltext02 = `<li class="list-group-item"><div class="row"> <div class="col-6 text-center justify-content-center"><img class="img-fluid rounded" style="width:100%" src="https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/${el.appid}/${el.img_logo_url}.jpg"></div><div class="col-6 text-center" ><p><a href="https://store.steampowered.com/app/${el.appid}">${el.name}</a></p><p>总共玩了${el.playtime_forever}小时</p></div></div></li>`;
+            $(pl).append(htmltext02);
+        }
+    }
+
+    function getcnyrt() {
+        $.getJSON(`https://cfwk.dogcraft.top/dog/${mainid}`, function (json) {
+            kc = json.response;
+            var squ = kc.games.length / PAGEITAM;
+            squ = squ.toFixed();
+            for (let index = 0; index < squ; index++) {
+                datadog[index] = kc.games.slice(index * PAGEITAM, (index + 1) * PAGEITAM)
+            }
+            var qyu = Number(squ)
+            $('#ttsd').jqPaginator({
+                totalPages: qyu,
+                visiblePages: 5,
+                currentPage: 1,
+                first: '<li class="page-item"><a class="page-link" href="javascript:void(0);">First</a></li>',
+                prev: '<li class="page-item"><a class="page-link" href="javascript:void(0);">Previous</a></li>',
+                next: '<li class="page-item"><a class="page-link" href="javascript:void(0);">Next</a></li>',
+                last: '<li class="page-item"><a class="page-link" href="javascript:void(0);">Last</a></li>',
+                page: '<li class="page-item"><a class="page-link" href="javascript:void(0);">{{page}}</a></li>',
+                onPageChange: function (num, type) {
+                    showitams("#yxlb", datadog[num - 1])
+                }
+            });
+        })
+    }
+</script>
+
+</body>
+
+</html>

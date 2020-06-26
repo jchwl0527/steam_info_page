@@ -37,7 +37,7 @@ const url2 = 'https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/';
 const url4 = 'https://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v0001/';
 const url5 = 'https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/';
 const url6 = 'https://api.steampowered.com/ISteamUser/GetFriendList/v0001/'
-const stkey = "YOUR STEAM WEB API KEY";
+const stkey = STEAMKEY;
 const stid = "76561198343712334";
 
 async function dog(resdog1, resdog2) {

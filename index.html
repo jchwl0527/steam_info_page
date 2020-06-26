@@ -6,16 +6,12 @@
     <meta charset="utf-8">
     <meta name="description" content="Show Steam Info">
     <meta name="keywords" content="Show Steam Info">
-    <!-- <meta charset="utf-8"> -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
     <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
-
-    <!-- <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script> -->
-    <!-- <script src="https://cdn.jsdelivr.net/vue/latest/vue.min.js"></script> -->
 
     <style>
         .fakeimg {
@@ -44,6 +40,7 @@
     <p>一个用于展示steam库存与好友信息的简单页面</p>
     <p>基于<a href="https://steamcommunity.com/dev/">Steam Web Api</a></p>
 </div>
+
 <body>
     <nav class="navbar navbar-expand-sm bg-primary navbar-dark">
         <a class="navbar-brand" href="https://www.dogcraft.top/steaminfo/">刷新</a>
@@ -62,7 +59,6 @@
         </div>
     </nav>
     <br>
-    <!-- <h2>steam 库存测试页面</h2> -->
     <div class="row">
         <div class="col-md">
             <div class="container center">
@@ -110,7 +106,7 @@
             }
             return (false);
         }
-        var mainid = '76561198343712334'
+        var mainid = '76561198343712334';
 
         if (getQueryVariable("sid")) {
             mainid = getQueryVariable("sid");
