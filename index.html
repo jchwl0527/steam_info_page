@@ -11,8 +11,7 @@
     <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
-
-
+    <script src="./js/jq-paginator.min.js"></script>
     <style>
         .fakeimg {
             height: 200px;
@@ -75,9 +74,18 @@
                     </div>
                     <ul class="list-group" id="yxlb">
                         <li class="list-group-item  list-group-item-info text-center" id="zzzw"></li>
-                        <!-- <li class="list-group-item">Second item</li> -->
-                        <!-- <li class="list-group-item">Third item</li> -->
                     </ul>
+                </div>
+                <div class="card">
+                    <div class="card-header text-center">
+                        <h4 class="card-title">游戏库存</h4>
+                    </div>
+                    <ul class="list-group" id="yxkc">
+                    </ul>
+                    <div class="card-footer" id="fttsd">
+                        <ul class="pagination" id="ttsd"></ul>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -89,9 +97,11 @@
                     </div>
                     <ul class="list-group" id="flst">
                         <li class="list-group-item  list-group-item-info" id="flsn"></li>
-                        <!-- <li class="list-group-item">Second item</li> -->
-                        <!-- <li class="list-group-item">Third item</li> -->
                     </ul>
+
+                    <div class="card-footer" id="fttsd2">
+                        <ul class="pagination" id="ttsd2"></ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -126,7 +136,6 @@
                 for (let index = 0; index < sg.total_count; index++) {
                     const el = sg.games[index];
                     htmltext02 = `<li class="list-group-item"><div class="row"> <div class="col-6 text-center justify-content-center"><img class="img-fluid rounded" style="width:100%" src="https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/${el.appid}/${el.img_logo_url}.jpg"></div><div class="col-6 text-center" ><p><a href="https://store.steampowered.com/app/${el.appid}">${el.name}</a></p><p>两周内玩了${el.playtime_2weeks}小时,总共玩了${el.playtime_forever}小时</p></div></div></li>`;
-                    //`<p>${el.name} 两周内玩了${el.playtime_2weeks}小时 总共玩了${el.playtime_forever}小时</p><br><p><a href="https://store.steampowered.com/app/${el.appid}"> <img src="https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/${el.appid}/${el.img_logo_url}.jpg" > </a> </p><br><br>`;
                     $("#yxlb").append(htmltext02);
                 }
             }
@@ -137,22 +146,42 @@
         getdogsum();
         function getdogsum(cbk) {
             $.getJSON(`https://cfwk.dogcraft.top/sum/${mainid}`, function (json) {
-                sgl = json;//.response;
-                // console.log(sgl);
+                sgl = json;
                 var sua = sgl.response.players[0].timecreated;
-                var sub = sgl.response.players[0].lastlogoff;
+                // var sub = sgl.response.players[0].lastlogoff;
                 var sdy = new Date(sua * 1000);
-                var sdz = new Date(sub * 1000);
+                // var sdz = new Date(sub * 1000);
                 htmltext1 = `  <div class="card-body"> <h4  class="card-title" >${sgl.response.players[0].personaname}</h4>`;
                 htmltext2 = `<img class="card-img-top img-fluid rounded"  src="${sgl.response.players[0].avatarfull}" alt="Card image" style="width:100%">`;
-                htmltext3 = `<p class="card-text"> <span class="badge badge-info">${dogstatus[sgl.response.players[0].personastate]}</span> <br>创号时间：${sdy.toString()} <br> 上次离线时间 : ${sdz.toString()}</p></div>`;
-                // htmltext4=`<`
+                htmltext3 = `<p class="card-text"> <span class="badge badge-info">${dogstatus[sgl.response.players[0].personastate]}</span> <br>创号时间：${sdy.toString()} <br></p></div>`;
                 $("#sui").prepend(htmltext2 + htmltext1 + htmltext3)
-                // htmltext3=``
-                // $("#sd").text(htmltext1);
-
+                if (sgl.response.players[0].profileurl) {
+                    var uyi = `<a href="${sgl.response.players[0].profileurl}" class="btn btn-primary" style="float:right;">Profile</a>`;
+                    $("#sui2").append(uyi);
+                }
             });
         }
+        function addfendlist(pl, dat) {
+            var stt = [];
+            $(pl).html("");
+            for (let index = 0; index < dat.length; index++) {
+                const ele = dat[index];
+                stt[index] = ele.friend_since;
+
+                $.getJSON(`https://cfwk.dogcraft.top/sum/${ele.steamid}`, function (jsio) {
+                    let sgl = jsio;
+                    htmltextb1 = `<div class="col-6 text-center"><a href="?sid=${sgl.response.players[0].steamid}">${sgl.response.players[0].personaname}</a> </div>`;
+                    htmltextb2 = `<div class="col-6 text-center"><img src="${sgl.response.players[0].avatarmedium}" img-fluid rounded ></div>`;
+                    ltxt = '<li class="list-group-item"><div class="row">' + htmltextb2 + htmltextb1 + '</div></li>';
+                    $(pl).append(ltxt);
+                })
+                // console.log(ele.steamid)
+
+            }
+        }
+
+
+
         var fdl;
         getdogfld();
         function getdogfld() {
@@ -160,25 +189,37 @@
                 fdl = json;
                 if (fdl.friendslist == null) {
                     $("#flsn").append('<p class="text-center">没有好友或者不公开好友资料<p>');
+                    $("#fttsd2").remove();
                 } else {
                     htmltexta1 = `<p class="text-center">共有${fdl.friendslist.friends.length}个好友</p>`;
                     $("#flsn").append(htmltexta1);
                     //开始套娃
                     var stt = [];
-                    for (let index = 0; index < fdl.friendslist.friends.length; index++) {
-                        const ele = fdl.friendslist.friends[index];
-                        stt[index] = ele.friend_since;
-
-                        $.getJSON(`https://cfwk.dogcraft.top/sum/${ele.steamid}`, function (jsio) {
-                            let sgl = jsio;
-                            htmltextb1 = `<div class="col-6 text-center"><a href="./?sid=${sgl.response.players[0].steamid}">${sgl.response.players[0].personaname}</a> </div>`;
-                            htmltextb2 = `<div class="col-6 text-center"><img src="${sgl.response.players[0].avatarmedium}" img-fluid rounded ></div>`;
-                            ltxt = '<li class="list-group-item"><div class="row">' + htmltextb2 + htmltextb1 + '</div></li>';
-                            $("#flst").append(ltxt);
-                        })
-                        // console.log(ele.steamid)
-
+                    // addfendlist("#flst", fdl.friendslist.friends);
+                    var squ = fdl.friendslist.friends.length / PAGEITAM;
+                    // squ = squ.toFixed();
+                    for (let index = 0; index < squ; index++) {
+                        datacat[index] = fdl.friendslist.friends.slice(index * PAGEITAM, (index + 1) * PAGEITAM)
                     }
+
+                    // var qyu = Number(squ)
+                    var qyu = Math.ceil(squ);
+                    console.log(fdl.friendslist.friends.length)
+                    console.log(qyu)
+                    $('#ttsd2').jqPaginator({
+                        totalPages: qyu,
+                        visiblePages: 5,
+                        currentPage: 1,
+                        first: '<li class="page-item"><a class="page-link" href="javascript:void(0);">First</a></li>',
+                        prev: '<li class="page-item"><a class="page-link" href="javascript:void(0);">Previous</a></li>',
+                        next: '<li class="page-item"><a class="page-link" href="javascript:void(0);">Next</a></li>',
+                        last: '<li class="page-item"><a class="page-link" href="javascript:void(0);">Last</a></li>',
+                        page: '<li class="page-item"><a class="page-link" href="javascript:void(0);">{{page}}</a></li>',
+                        onPageChange: function (num, type) {
+                            addfendlist("#flst", datacat[num - 1])
+                        }
+                    });
+
                 }
 
             })
@@ -188,17 +229,66 @@
         var kc;
         getcnyrt();
 
+        // function getcnyrt() {
+        //     $.getJSON(`https://cfwk.dogcraft.top/dog/${mainid}`, function (json) {
+        //         kc = json.response;
+        //         // let hunum=kc.game_count;
+        //         var ooi = `<a href="#" class="btn btn-primary">库存数量:${kc.game_count}</a>`;
+        //         $("#sui2").html(ooi);
+        //         // console.log("hhu");
+
+        //     })
+        // }
+
+
+        var PAGEITAM = 10;
+        var datadog = [];
+        var datacat = [];
+        function showitams(pl, dat) {
+            $(pl).html("");
+            for (let index = 0; index < dat.length; index++) {
+                const el = dat[index];
+                htmltext02 = `<li class="list-group-item"><div class="row"> <div class="col-6 text-center justify-content-center"><img class="img-fluid rounded" style="width:100%" src="https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/${el.appid}/${el.img_logo_url}.jpg"></div><div class="col-6 text-center" ><p><a href="https://store.steampowered.com/app/${el.appid}">${el.name}</a></p><p>总共玩了${el.playtime_forever}小时</p></div></div></li>`;
+                $(pl).append(htmltext02);
+            }
+        }
         function getcnyrt() {
             $.getJSON(`https://cfwk.dogcraft.top/dog/${mainid}`, function (json) {
                 kc = json.response;
-                // let hunum=kc.game_count;
-                var ooi = `<a href="#" class="btn btn-primary">库存数量:${kc.game_count}</a>`;
-                $("#sui2").html(ooi);
-                // console.log("hhu");
+                if (kc.game_count == null) {
+                    var ooi = `<a href="#" class="btn btn-primary">库存数量:未公开</a>`;
+                    $("#sui2").prepend(ooi);
+                    h02 = `<li class="list-group-item list-group-item-info"><p class="text-center">未公开游戏资料或没有游戏</p></li>`;
+                    $("#yxkc").html(h02);
+                    $("#fttsd").remove();
+
+                } else {
+
+                    var ooi = `<a href="#" class="btn btn-primary">库存数量:${kc.game_count}</a>`;
+                    $("#sui2").prepend(ooi);
+                    var squ = kc.games.length / PAGEITAM;
+                    // squ = squ.toFixed();
+                    for (let index = 0; index < squ; index++) {
+                        datadog[index] = kc.games.slice(index * PAGEITAM, (index + 1) * PAGEITAM)
+                    }
+                    var qyu = Math.ceil(squ);
+                    $('#ttsd').jqPaginator({
+                        totalPages: qyu,
+                        visiblePages: 5,
+                        currentPage: 1,
+                        first: '<li class="page-item"><a class="page-link" href="javascript:void(0);">First</a></li>',
+                        prev: '<li class="page-item"><a class="page-link" href="javascript:void(0);">Previous</a></li>',
+                        next: '<li class="page-item"><a class="page-link" href="javascript:void(0);">Next</a></li>',
+                        last: '<li class="page-item"><a class="page-link" href="javascript:void(0);">Last</a></li>',
+                        page: '<li class="page-item"><a class="page-link" href="javascript:void(0);">{{page}}</a></li>',
+                        onPageChange: function (num, type) {
+                            showitams("#yxkc", datadog[num - 1])
+                        }
+                    });
+                }
 
             })
         }
-
     </script>
 
     <br>
