@@ -135,7 +135,7 @@
                 var htmltext02 = ' ';
                 for (let index = 0; index < sg.total_count; index++) {
                     const el = sg.games[index];
-                    htmltext02 = `<li class="list-group-item"><div class="row"> <div class="col-6 text-center justify-content-center"><img class="img-fluid rounded" style="width:100%" src="https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/${el.appid}/${el.img_logo_url}.jpg"></div><div class="col-6 text-center" ><p><a href="https://store.steampowered.com/app/${el.appid}">${el.name}</a></p><p>两周内玩了${el.playtime_2weeks}小时,总共玩了${el.playtime_forever}小时</p></div></div></li>`;
+                    htmltext02 = `<li class="list-group-item"><div class="row"> <div class="col-6 text-center justify-content-center"><img class="img-fluid rounded" style="width:100%" src="https://cdn.akamai.steamstatic.com/steam/apps/${el.appid}/header.jpg"></div><div class="col-6 text-center" ><p><a href="https://store.steampowered.com/app/${el.appid}">${el.name}</a></p><p>两周内玩了${el.playtime_2weeks}小时,总共玩了${el.playtime_forever}小时</p></div></div></li>`;
                     $("#yxlb").append(htmltext02);
                 }
             }
@@ -248,7 +248,7 @@
             $(pl).html("");
             for (let index = 0; index < dat.length; index++) {
                 const el = dat[index];
-                htmltext02 = `<li class="list-group-item"><div class="row"> <div class="col-6 text-center justify-content-center"><img class="img-fluid rounded" style="width:100%" src="https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/${el.appid}/${el.img_logo_url}.jpg"></div><div class="col-6 text-center" ><p><a href="https://store.steampowered.com/app/${el.appid}">${el.name}</a></p><p>总共玩了${el.playtime_forever}小时</p></div></div></li>`;
+                htmltext02 = `<li class="list-group-item"><div class="row"> <div class="col-6 text-center justify-content-center"><img class="img-fluid rounded" style="width:100%" src="https://cdn.akamai.steamstatic.com/steam/apps/${el.appid}/header.jpg"></div><div class="col-6 text-center" ><p><a href="https://store.steampowered.com/app/${el.appid}">${el.name}</a></p><p>总共玩了${el.playtime_forever}小时</p></div></div></li>`;
                 $(pl).append(htmltext02);
             }
         }
@@ -294,46 +294,11 @@
     <br>
     <div class="jumbotron text-center " style="margin-bottom:0">
         <p>© 2020 Dogcraft</p>
-        <p>底部内容</p>
     </div>
 
 
 </body>
 
 
-
-
-
-
-
-<!-- !!!
-<iframe src="https://www.dogcraft.top/lt.html"  width="100%"  scrolling="auto" seamless >
-</iframe>
-!!! -->
-
-
-<!-- !!!
-<link href="https://cdn.bootcdn.net/ajax/libs/botui/0.3.9/botui.min.css" rel="stylesheet">
-  <link href="https://cdn.bootcdn.net/ajax/libs/botui/0.3.9/botui-theme-default.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/vue/latest/vue.min.js"></script>
-  <script src="https://www.dogcraft.top/js/botui.js"></script>
-
-  <div   >
-    <div id="my-botui-app" class="botui">
-      <h4 class="text-center">与 dogcraft 对话中……</h4>
-      <bot-ui></bot-ui>
-    </div>
-  </div>
-
-  <script src="https://www.dogcraft.top/js/lt.js"></script>
-
-!!! -->
-
-
-<!-- if (document.getElementById("my-botui-app")) {
-    if ($("div").hasClass("botui-container")==false) {
-        botuiinit();
-    }
-} -->
 
 </html>
