@@ -125,7 +125,7 @@
         }
         var sg;
         URRLsa = 'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/'
-        $.getJSON(`https://cfwk.dogcraft.top/cat/${mainid}`, function (json) {
+        $.getJSON(`https://steam-api.syr.workers.dev/cat/${mainid}`, function (json) {
             sg = json.response;
             // console.log(sg);
             if (sg.total_count == null) {
@@ -145,7 +145,7 @@
         var dogstatus = ["离线", "在线", "忙", "离开", "打盹", "渴望交易", "渴望玩游戏"];
         getdogsum();
         function getdogsum(cbk) {
-            $.getJSON(`https://cfwk.dogcraft.top/sum/${mainid}`, function (json) {
+            $.getJSON(`https://steam-api.syr.workers.dev/sum/${mainid}`, function (json) {
                 sgl = json;
                 var sua = sgl.response.players[0].timecreated;
                 // var sub = sgl.response.players[0].lastlogoff;
@@ -168,7 +168,7 @@
                 const ele = dat[index];
                 stt[index] = ele.friend_since;
 
-                $.getJSON(`https://cfwk.dogcraft.top/sum/${ele.steamid}`, function (jsio) {
+                $.getJSON(`https://steam-api.syr.workers.dev/sum/${ele.steamid}`, function (jsio) {
                     let sgl = jsio;
                     htmltextb1 = `<div class="col-6 text-center"><a href="?sid=${sgl.response.players[0].steamid}">${sgl.response.players[0].personaname}</a> </div>`;
                     htmltextb2 = `<div class="col-6 text-center"><img src="${sgl.response.players[0].avatarmedium}" img-fluid rounded ></div>`;
@@ -185,7 +185,7 @@
         var fdl;
         getdogfld();
         function getdogfld() {
-            $.getJSON(`https://cfwk.dogcraft.top/pig/${mainid}`, function (json) {
+            $.getJSON(`https://steam-api.syr.workers.dev/pig/${mainid}`, function (json) {
                 fdl = json;
                 if (fdl.friendslist == null) {
                     $("#flsn").append('<p class="text-center">没有好友或者不公开好友资料<p>');
@@ -253,7 +253,7 @@
             }
         }
         function getcnyrt() {
-            $.getJSON(`https://cfwk.dogcraft.top/dog/${mainid}`, function (json) {
+            $.getJSON(`https://steam-api.syr.workers.dev/dog/${mainid}`, function (json) {
                 kc = json.response;
                 if (kc.game_count == null) {
                     var ooi = `<a href="#" class="btn btn-primary">库存数量:未公开</a>`;
